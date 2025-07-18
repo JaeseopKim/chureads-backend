@@ -9,7 +9,9 @@ export const connectDB = async () => {
         if (db) return db;
 
         //const MONGODB_URI = process.env.MONGO_URI_LOCAL;
-        const MONGODB_URI = (process.env.NODE_EVN === "development") ? process.env.MONGO_URI_LOCAL : process.env.MONGO_URI_ATLAS;
+        //const MONGODB_URI = (process.env.NODE_EVN === "development") ? process.env.MONGO_URI_LOCAL : process.env.MONGO_URI_ATLAS;
+        const MONGODB_URI = process.env.MONGO_URI_ATLAS;
+
 
         const DB_NAME = process.env.DB_NAME;
         // mongoDB 연결
