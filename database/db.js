@@ -8,7 +8,9 @@ export const connectDB = async () => {
         // 이미 DB가 연결되어 있는 경우
         if (db) return db;
 
-        const MONGODB_URI = process.env.MONGO_URI_LOCAL;
+        //const MONGODB_URI = process.env.MONGO_URI_LOCAL;
+        const MONGODB_URI = (process.env.NODE_EVN === "development") ? process.env.MONGO_URI_LOCAL : process.env.MONGO_URI_ATLAS;
+
         const DB_NAME = process.env.DB_NAME;
         // mongoDB 연결
         // MongoDB 객체 생성(mongoDB와의 연결을 관리, 상호작용)
