@@ -1,6 +1,7 @@
 import express from "express";
 import { generateTags } from "../services/tagService.js";
 import { ObjectId } from "mongodb";
+import { broadcastToClients } from "../sse/sseManager.js";
 
 // 게시물 관련 모든 API 엔드포인트를 관리하는 라우터
 const router = express.Router();
@@ -61,7 +62,17 @@ router.post("/", async (req, res) => {
             likedUsers: [], //좋아요 한 UserID목록
             createdAt: new Date(),
         };
+
         const result = await collection.insertOne(newItem);
+
+        // 새 게시물 알림을 모든 클라이언트에게 전송
+        broadcastToClients("newPost", {
+            postId: result.insertedId,
+            userName: newItem.userName,
+            content: newItem.content.substring(0, 20) + (newItem.content.length > 20) ? "..." : "",
+            createdAt: newItem.createdAt,
+            message: `${newItem.userName}이 새글을 작성했습니다.`
+        });
 
         console.log(result);
         // TODO: 새 게시물 알림을 모든 클라이언트에게 전송

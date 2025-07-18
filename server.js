@@ -5,6 +5,7 @@ import { OpenAI } from 'openai';
 import postRouter, { init } from "./routes/posts.js";
 import { connectDB } from "./database/db.js";
 import cors from "cors";
+import { handleSSEConnection } from "./sse/sseManager.js";
 
 // 환경변수
 dotenv.config();
@@ -22,6 +23,8 @@ app.use(express.urlencoded({ extended: true }));
 // 라우터 미들웨어 등록
 // /posts/ 등 라우터 사용
 app.use("/posts", postRouter);
+
+app.get("/events", handleSSEConnection);
 
 app.listen(PORT, async () => {
     console.log("server running at", PORT);
